@@ -14,6 +14,18 @@ LINE = (
 )
 
 
+def validate_entry(text):
+    """Check the excuse is one clean line within the length limit."""
+    if "\n" in text or "\r" in text:
+        raise ValueError("entry must be a single line with no line breaks")
+    if not 1 <= len(text) <= 200:
+        raise ValueError("entry must be 1-200 characters long")
+    if text != text.strip():
+        raise ValueError("entry must not start or end with whitespace")
+    if any(ord(ch) < 32 for ch in text):
+        raise ValueError("entry must not contain control characters")
+
+
 def write_entry(path):
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(LINE)
@@ -21,9 +33,7 @@ def write_entry(path):
 
 
 def main():
-    assert "\n" not in LINE, "entry must be a single line"
-    assert 1 <= len(LINE) <= 200, "entry must be 1-200 characters"
-    assert LINE.strip() == LINE, "entry must not be only whitespace"
+    validate_entry(LINE)
     os.makedirs("/output", exist_ok=True)
     write_entry("/output/entry.txt")
     write_entry("entry.txt")
