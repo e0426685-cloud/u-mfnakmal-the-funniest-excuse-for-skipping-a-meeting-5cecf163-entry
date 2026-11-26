@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Entry program for u-mfnakmal-the-funniest-excuse-for-skipping-a-meeting-5cecf163.
 
-Writes one original single-line excuse (<=200 characters) to /output/entry.txt
-and to ./entry.txt in the repo. Python standard library only.
+Writes one original single-line excuse (<=200 characters) to the grader's
+designated output directory (MAKEFUN_OUTPUT_DIR, default /output) as
+entry.txt. The grader's repo directory is read-only, so this program writes
+nowhere else. Python standard library only.
 """
 
 import os
@@ -34,9 +36,9 @@ def write_entry(path):
 
 def main():
     validate_entry(LINE)
-    os.makedirs("/output", exist_ok=True)
-    write_entry("/output/entry.txt")
-    write_entry("entry.txt")
+    output_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(output_dir, exist_ok=True)
+    write_entry(os.path.join(output_dir, "entry.txt"))
 
 
 if __name__ == "__main__":
